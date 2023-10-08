@@ -8,11 +8,6 @@ const resources = JSON.parse(
 dotenv.config();
 const app = express();
 
-const PORT = process.env.PORT || 3000;
-const server = app.listen(PORT, () => {
-	console.log(`Server is running on port ${PORT}`);
-});
-
 app.use(express.json());
 
 app.get("/resources", (req, res) => {
@@ -46,4 +41,8 @@ app.get("/resources/group", (req, res) => {
 	res.status(200).json(data);
 });
 
+const PORT = process.env.PORT || 3000;
+const server = app.listen(PORT, () => {
+	console.log(`Server is running on port ${PORT}`);
+});
 module.exports = { app, server }; // Export both app and server
