@@ -35,9 +35,13 @@ app.get("/resources/sort", (req, res) => {
 });
 
 app.get("/resources/group", (req, res) => {
-	let data = {};
-	resources.forEach((e) => {
-		data[e.category].push(e);
+	const data = resources.reduce((acc, e) => {
+		const { category } = e;
+		if (!acc[category]) {
+			acc[category] = [];
+		}
+		acc[category].push(e);
+		return acc;
 	});
 	res.status(200).json(data);
 });
