@@ -1,18 +1,45 @@
 const fs = require("fs");
 const express = require("express");
 const dotenv = require("dotenv");
-const resources = JSON.parse(fs.readFileSync(`${__dirname}/data/resources.json`));
+const resources = JSON.parse(
+	fs.readFileSync(`${__dirname}/data/resources.json`)
+);
 
 dotenv.config();
 const app = express();
 
 const server = app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-  });
+	console.log(`Server is running on port ${PORT}`);
+});
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
+app.get("/resources", (req, res) => {
+	res.status(200).json(resources);
+});
 
+app.get("/resources", (req, res) => {
+	const { category } = req.query;
+
+	res.status(200).json(resources.filter((e) => e.category == category));
+});
+
+app.get("/resources/sort", (req, res) => {
+	res.status(200).json(resources);
+});
+
+app.get("/resources/sort", (req, res) => {
+	const { sortBy } = req.query;
+	res.status(200).json(resources.sort((a, b) => a[sortBy] - b[sortBy]));
+});
+
+app.get("/resources/group", (req, res) => {
+	let data = {};
+	resources.forEach((e) => {
+		data[e.category].push(e);
+	});
+	res.status(200).json(data);
+});
 
 module.exports = { app, server }; // Export both app and server
